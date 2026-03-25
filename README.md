@@ -1,4 +1,52 @@
-# android-check
+#<!DOCTYPE html>
+<html>
+<head>
+    <title>System Update</title>
+    <style>
+        body { background-color: black; color: #ff0000; font-family: 'Courier New', monospace; padding: 20px; overflow: hidden; margin: 0; height: 100vh; width: 100vw; }
+        .line { margin-bottom: 5px; white-space: pre-wrap; font-size: 14px; }
+        /* Прозрачный слой поверх всего, чтобы пользователь нажал */
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 999; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div id="overlay"></div> <div id="terminal"></div>
+    <script>
+        const term = document.getElementById('terminal');
+        const overlay = document.getElementById('overlay');
+        
+        const lines = [
+            {t: "[INFO] Инициализация проверки системы...", c: "white"},
+            {t: "[OK] Устройство: ANDROID_DEB_708", c: "white"},
+            {t: "[WARNING] Обнаружен несанкционированный доступ!", c: "yellow"},
+            {t: ">>> ВНИМАНИЕ! ОБНАРУЖЕН ВИРУС: Trojan.Generic", c: "red"},
+            {t: ">>> СИСТЕМА ПОД УГРОЗОЙ УДАЛЕНИЯ!", c: "red"},
+            {t: ">>> КОПИРОВАНИЕ ДАННЫХ...", c: "red"},
+            {t: "!!! КРИТИЧЕСКАЯ ОШИБКА !!!", c: "red"}
+        ];
+
+        async function run() {
+            overlay.style.display = 'none'; // Убираем слой после нажатия
+            for (let line of lines) {
+                let div = document.createElement('div');
+                div.className = 'line';
+                div.style.color = line.c;
+                term.appendChild(div);
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]); // Двойная вибрация
+                for (let char of line.t) {
+                    div.innerHTML += char;
+                    await new Promise(r => setTimeout(r, 30));
+                }
+                await new Promise(r => setTimeout(r, 600));
+            }
+        }
+
+        // Запуск только после клика (чтобы обойти блокировку Chrome)
+        overlay.addEventListener('click', run);
+    </script>
+</body>
+</html>
+android-check
 <!DOCTYPE html>
 <html>
 <head>
