@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>System Update</title>
+    <style>
+        body { background-color: black; color: #ff0000; font-family: 'Courier New', monospace; padding: 20px; overflow: hidden; margin: 0; }
+        .line { margin-bottom: 5px; white-space: pre-wrap; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div id="terminal"></div>
+    <script>
+        const term = document.getElementById('terminal');
+        const lines = [
+            {t: "[INFO] Инициализация проверки системы...", c: "white"},
+            {t: "[OK] Устройство: ANDROID_DEB_708", c: "white"},
+            {t: "[WARNING] Обнаружен несанкционированный доступ!", c: "yellow"},
+            {t: ">>> ВНИМАНИЕ! ОБНАРУЖЕН ВИРУС: Trojan.Generic", c: "red"},
+            {t: ">>> СИСТЕМА ПОД УГРОЗОЙ УДАЛЕНИЯ!", c: "red"},
+            {t: ">>> КОПИРОВАНИЕ ДАННЫХ НА УДАЛЕННЫЙ СЕРВЕР...", c: "red"},
+            {t: ">>> ОШИБКА: РАЗДЕЛ /root ПОВРЕЖДЕН", c: "red"},
+            {t: "!!! КРИТИЧЕСКАЯ ОШИБКА: SYSTEM HALTED !!!", c: "red"}
+        ];
+        async function run() {
+            for (let line of lines) {
+                let div = document.createElement('div');
+                div.className = 'line';
+                div.style.color = line.c;
+                term.appendChild(div);
+                for (let char of line.t) {
+                    div.innerHTML += char;
+                    await new Promise(r => setTimeout(r, 30));
+                }
+                if (navigator.vibrate) navigator.vibrate(100);
+                await new Promise(r => setTimeout(r, 800));
+            }
+            let i = 5;
+            let timerDiv = document.createElement('div');
+            timerDiv.style.color = "red";
+            term.appendChild(timerDiv);
+            while (i > 0) {
+                timerDiv.innerHTML = `ВЫКЛЮЧЕНИЕ УСТРОЙСТВА ЧЕРЕЗ: ${i} СЕК...`;
+                if (navigator.vibrate) navigator.vibrate(500);
+                await new Promise(r => setTimeout(r, 1000));
+                i--;
+            }
+            term.innerHTML = "<h1 style='color:red; text-align:center; margin-top:40%; font-size:20px;'>FATAL ERROR: SYSTEM DESTROYED</h1>";
+        }
+        run();
+    </script>
+</body>
+</html>
